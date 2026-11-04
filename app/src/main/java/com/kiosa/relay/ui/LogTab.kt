@@ -1,12 +1,17 @@
 package com.kiosa.relay.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -16,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kiosa.relay.RelayController
 import java.text.SimpleDateFormat
@@ -31,44 +37,63 @@ fun LogTab() {
     Column(Modifier.fillMaxWidth().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                Text("REQUEST LOG", style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-                Text("Last 200 events", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Request log", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text(
+                    "Last 200 events — newest first",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
             TextButton(onClick = { RelayController.engine.clearLog() }) { Text("Clear") }
         }
-        LazyColumn(
-            Modifier.fillMaxWidth().padding(top = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            items(snapshot.log, key = { it.t.toString() + it.msg }) { l ->
-                val color = when (l.kind) {
-                    "ok" -> OkGreen
-                    "cooldown" -> WarnAmber
-                    "error", "reject" -> ErrRed
-                    else -> CyanGrey
-                }
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
+        Spacer2()
+        if (snapshot.log.isEmpty()) {
+            EmptyHint("No events yet.")
+        }
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            items(snapshot.log, key = { "${it.t}-${it.key}-${it.msg}" }) { l ->
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(10.dp))
+                        .padding(horizontal = 12.dp, vertical = 9.dp),
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    Box(
+                        Modifier
+                            .padding(top = 3.dp)
+                            .width(3.dp)
+                            .height(34.dp)
+                            .background(logKindColor(l.kind), RoundedCornerShape(2.dp)),
+                    )
                     Text(
                         timeFmt.format(Date(l.t)),
                         style = MaterialTheme.typography.labelSmall,
                         fontFamily = FontFamily.Monospace,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 10.dp),
                     )
-                    Text(
-                        " [${l.kind}] ",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontFamily = FontFamily.Monospace,
-                        color = color,
-                    )
-                    Text(
-                        "${l.key}: ${l.msg}",
-                        style = MaterialTheme.typography.bodySmall,
-                        fontFamily = FontFamily.Monospace,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f).padding(bottom = 2.dp),
-                    )
+                    Column(Modifier.weight(1f).padding(start = 8.dp)) {
+                        Text(
+                            l.key,
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = logKindColor(l.kind),
+                        )
+                        Text(
+                            l.msg,
+                            style = MaterialTheme.typography.bodySmall,
+                            fontFamily = FontFamily.Monospace,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun Spacer2() {
+    Box(Modifier.height(8.dp))
 }

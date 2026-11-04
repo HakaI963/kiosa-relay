@@ -1,77 +1,63 @@
 package com.kiosa.relay.ui
 
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
-// ---- Kiosa Relay palette: white, black, light cyan, cyan grey ----
-val Cyan = Color(0xFF22D3EE)          // accent
-val LightCyan = Color(0xFFA5F3FC)     // highlights / dark-mode primary
-val CyanDeep = Color(0xFF0E7490)      // primary on light (AA contrast on white)
-val CyanGrey = Color(0xFF52707A)      // secondary text / dividers
-val NightBg = Color(0xFF070B0D)       // near black
-val NightSurface = Color(0xFF0D1417)
-val OkGreen = Color(0xFF10B981)
-val WarnAmber = Color(0xFFF59E0B)
-val ErrRed = Color(0xFFEF4444)
+// ---- Kiosa Relay palette — LIGHT ONLY ----
+// white · near-black ink · light cyan · cyan grey
+val Cyan = Color(0xFF22D3EE)
+val LightCyan = Color(0xFFA5F3FC)
+val CyanDeep = Color(0xFF0E7490)
+val CyanInk = Color(0xFF155E75)
+val CyanGrey = Color(0xFF52707A)
+val InkBlack = Color(0xFF0A1417)
+val MistBg = Color(0xFFF4FAFC)
+val OkGreen = Color(0xFF0F9D77)
+val WarnAmber = Color(0xFFD97706)
+val ErrRed = Color(0xFFDC2626)
 
 private val LightScheme = lightColorScheme(
     primary = CyanDeep,
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFCFF4FB),
-    onPrimaryContainer = Color(0xFF062E36),
+    primaryContainer = Color(0xFFD8F3FA),
+    onPrimaryContainer = CyanInk,
     secondary = CyanGrey,
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFE2EDF0),
+    secondaryContainer = Color(0xFFE5EEF1),
     onSecondaryContainer = Color(0xFF22343A),
     tertiary = Cyan,
-    background = Color.White,
-    onBackground = Color(0xFF0A1417),
+    background = MistBg,
+    onBackground = InkBlack,
     surface = Color.White,
-    onSurface = Color(0xFF0A1417),
+    onSurface = InkBlack,
     surfaceVariant = Color(0xFFEAF6F9),
-    onSurfaceVariant = Color(0xFF33525B),
-    outline = Color(0xFFB9CDD3),
-    outlineVariant = Color(0xFFDDE9EC),
-    error = Color(0xFFDC2626),
+    onSurfaceVariant = Color(0xFF3E5C64),
+    outline = Color(0xFFC3D6DB),
+    outlineVariant = Color(0xFFE2EDEF),
+    error = ErrRed,
     onError = Color.White,
+    errorContainer = Color(0xFFFDE8E8),
+    onErrorContainer = Color(0xFF7F1D1D),
 )
 
-private val DarkScheme = darkColorScheme(
-    primary = LightCyan,
-    onPrimary = Color(0xFF062026),
-    primaryContainer = Color(0xFF0B4A57),
-    onPrimaryContainer = Color(0xFFC5F4FC),
-    secondary = Color(0xFF93AEB6),
-    onSecondary = Color(0xFF07222A),
-    secondaryContainer = Color(0xFF22343A),
-    onSecondaryContainer = Color(0xFFCBE2E8),
-    tertiary = Cyan,
-    background = NightBg,
-    onBackground = Color(0xFFE7F5F8),
-    surface = NightSurface,
-    onSurface = Color(0xFFE7F5F8),
-    surfaceVariant = Color(0xFF122024),
-    onSurfaceVariant = Color(0xFFAFC9D1),
-    outline = Color(0xFF2E454C),
-    outlineVariant = Color(0xFF1B2C31),
-    error = Color(0xFFF87171),
-    onError = Color(0xFF2B0505),
+private val KiosaShapes = Shapes(
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(10.dp),
+    medium = RoundedCornerShape(14.dp),
+    large = RoundedCornerShape(18.dp),
+    extraLarge = RoundedCornerShape(26.dp),
 )
 
 @Composable
 fun KiosaTheme(content: @Composable () -> Unit) {
-    val mode = com.kiosa.relay.RelayController.settings.value.themeMode
-    val dark = when (mode) {
-        "light" -> false
-        "dark" -> true
-        else -> isSystemInDarkTheme()
-    }
     MaterialTheme(
-        colorScheme = if (dark) DarkScheme else LightScheme,
+        colorScheme = LightScheme,
+        shapes = KiosaShapes,
         content = content,
     )
 }

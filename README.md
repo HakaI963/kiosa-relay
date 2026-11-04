@@ -70,7 +70,7 @@ Phone and computer must share the same Wi-Fi. Test it: `curl http://<phone-ip>:8
 | Upstream request timeout | 300 s | Settings |
 | Upstream base URL | https://kiosapi.com/v1 | Settings |
 | Pause relay (503 new requests) | off | Relay tab |
-| Theme | System (white / black / light-cyan / cyan-grey palette) | Settings |
+| Theme | Light-only (white / black ink / light cyan / cyan-grey palette) | — |
 | Keys: add, edit, delete, reorder, enable/disable, live test | — | Keys tab |
 
 ## Build

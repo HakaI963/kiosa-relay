@@ -21,7 +21,6 @@ data class RelaySettings(
     val requestTimeoutSec: Int = 300,
     val upstreamBaseUrl: String = "https://kiosapi.com/v1",
     val paused: Boolean = false,
-    val themeMode: String = "system", // system | light | dark
 )
 
 /** Persists settings (plain prefs) and API keys (encrypted prefs). Keys never leave the device. */
@@ -57,7 +56,6 @@ class SettingsStore(context: Context) {
             requestTimeoutSec = prefs.getInt("requestTimeoutSec", d.requestTimeoutSec).coerceIn(30, 3600),
             upstreamBaseUrl = prefs.getString("upstream", d.upstreamBaseUrl) ?: d.upstreamBaseUrl,
             paused = prefs.getBoolean("paused", d.paused),
-            themeMode = prefs.getString("theme", d.themeMode) ?: d.themeMode,
         )
     }
 
@@ -74,7 +72,6 @@ class SettingsStore(context: Context) {
             .putInt("requestTimeoutSec", s.requestTimeoutSec)
             .putString("upstream", s.upstreamBaseUrl)
             .putBoolean("paused", s.paused)
-            .putString("theme", s.themeMode)
             .apply()
     }
 
