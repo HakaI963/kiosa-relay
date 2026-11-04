@@ -52,7 +52,7 @@ fun RelayTab() {
 
     val running = serverState == ServerState.RUNNING
     val port = settings.port
-    val ip = quickIp()
+    val ip = RelayController.lanIp() ?: "127.0.0.1"
 
     Column(
         Modifier
