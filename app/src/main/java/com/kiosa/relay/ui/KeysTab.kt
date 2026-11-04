@@ -124,7 +124,7 @@ fun KeysTab() {
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
-                            StatusPill(status, remaining)
+                            StatusPill(status, remaining.toInt())
                         }
                         view?.let {
                             if (it.lastError != null && status == KeyStatus.ERROR) {

@@ -247,7 +247,7 @@ fun RelayTab() {
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
-                        StatusPill(k.status, remaining)
+                        StatusPill(k.status, remaining.toInt())
                     }
                     if (k.status == KeyStatus.COOLDOWN) {
                         Spacer(Modifier.height(6.dp))
