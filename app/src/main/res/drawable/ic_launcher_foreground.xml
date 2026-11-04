@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- relay bolt: key 1 out, key 2 in -->
+    <path
+        android:fillColor="#A5F3FC"
+        android:pathData="M60,22 L34,60 L48,60 L42,86 L74,46 L58,46 Z" />
+    <path
+        android:fillColor="#22D3EE"
+        android:pathData="M70,70 L88,70 L88,78 L70,78 Z M70,84 L82,84 L82,90 L70,90 Z" />
+</vector>

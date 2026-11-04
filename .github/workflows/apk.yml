@@ -1,0 +1,51 @@
+name: Build APK
+
+on:
+  push:
+    branches: ["main"]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.10.2"
+
+      - name: Build APKs (debug + release)
+        run: gradle --no-daemon --stacktrace assembleDebug assembleRelease
+
+      - name: Upload APKs (artifact on every build)
+        uses: actions/upload-artifact@v4
+        with:
+          name: kiosa-relay-apks
+          if-no-files-found: error
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            app/build/outputs/apk/release/*.apk
+
+      - name: Attach APKs to GitHub Release (tag builds only)
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "Kiosa Relay $GITHUB_REF_NAME" \
+            --notes "Installable APKs — the **debug** APK is recommended for sideloading (no signing setup needed). Enable 'Install unknown apps' for your browser/file manager to install." \
+            app/build/outputs/apk/debug/app-debug.apk#KiosaRelay-debug.apk \
+            app/build/outputs/apk/release/app-release.apk#KiosaRelay-release.apk
